@@ -29,8 +29,21 @@
         <role_conditions/>
         <script><![CDATA[(function executeRule(current, previous /*null when async*/) {
 	
-	if (current.end_date < current.start_date || current.start_date.getDayOfWeekLocalTime() <= getDayOfWeekLocalTime()) {
+	if (current.end_date < current.start_date) {
 		gs.addErrorMessage('End date must be later than start date!');
+		current.setAbortAction(true);
+	}
+	
+	var gdt1 = new GlideDBFunctionBuilder();
+	var myDateDiffFunction = gdt1.datediff();
+	myDateDiffFunction = gdt1.field(current.start_date);
+	myDateDiffFunction = gdt1.field(now());
+	myDateDiffFunction = gdt1.build();
+	console.log(myDateDiffFunction);
+	
+	
+	if(current.start_date.gdt1.getDayOfWeekLocalTime() === gdt1.getDayOfWeekLocalTime()) {
+		gs.addErrorMessage('Start time must be at least one day from today!');
 		current.setAbortAction(true);
 	}
 
@@ -42,7 +55,7 @@
         <sys_domain>global</sys_domain>
         <sys_domain_path>/</sys_domain_path>
         <sys_id>9ec00c92512b23007f4499dfccc4b570</sys_id>
-        <sys_mod_count>5</sys_mod_count>
+        <sys_mod_count>17</sys_mod_count>
         <sys_name>Set Start and End Dates</sys_name>
         <sys_overrides/>
         <sys_package display_value="Loaner Request" source="x_cdltd_loaner_req">4db3abf551e323007f4499dfccc4b589</sys_package>
@@ -50,7 +63,7 @@
         <sys_scope display_value="Loaner Request">4db3abf551e323007f4499dfccc4b589</sys_scope>
         <sys_update_name>sys_script_9ec00c92512b23007f4499dfccc4b570</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2019-02-12 18:30:46</sys_updated_on>
+        <sys_updated_on>2019-02-12 20:31:25</sys_updated_on>
         <template/>
         <when>before</when>
     </sys_script>
